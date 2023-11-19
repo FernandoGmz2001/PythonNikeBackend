@@ -1,0 +1,8 @@
+pyjwt
+flask
+flask-migrate
+flask-sqlalchemy
+flask-bcrypt
+bcrypt
+flask-cors
+psycopg2
