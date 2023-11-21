@@ -67,3 +67,13 @@ def delete_product(product_id):
         return {'message': 'Producto eliminado exitosamente'}, 200
     else:
         return {'error': 'Producto no encontrado'}, 404
+
+@product_routes.route('/products/<string:product_name>', methods=['DELETE'])
+def delete_product_by_name(product_name):
+    producto = products.query.filter_by(productName=product_name).first()
+    if producto:
+        db.session.delete(producto)
+        db.session.commit()
+        return {'message': 'Producto eliminado exitosamente'}, 200
+    else:
+        return {'error': 'Producto no encontrado'}, 404

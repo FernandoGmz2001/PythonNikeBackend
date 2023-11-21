@@ -4,6 +4,7 @@ from controllers.product_controller import (
     create_products,
     update_product,
     delete_product,
+    delete_product_by_name
 )
 
 product_routes = Blueprint("product_routes", __name__)
@@ -31,4 +32,8 @@ def update_product_route(product_id):
 @product_routes.route("/products/<product_id>", methods=["DELETE"])
 def delete_product_route(product_id):
     delete_product(product_id)
+    return jsonify({"message": "Product deleted successfully"}), 200
+
+def delete_product_by_name_route(product_name):
+    delete_product_by_name(product_name)
     return jsonify({"message": "Product deleted successfully"}), 200
