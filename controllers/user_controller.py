@@ -53,21 +53,24 @@ def update_user(user_id):
         return {'error': 'Usuario no encontrado'}, 404
 
 @user_routes.route('/users/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    user = users.query.get(user_id)
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-        return {'message': 'Usuario eliminado exitosamente'}, 200
+def delete_user_by_id(user_id):
+    if request.method == 'DELETE':
+        user = users.query.get(user_id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return {'message': 'Usuario eliminado exitosamente'}, 200
+        else:
+            return {'error': 'Usuario no encontrado'}, 404
     else:
-        return {'error': 'Usuario no encontrado'}, 404
+        return {'error': 'Método no permitido'}, 4055
 
-@user_routes.route('/users/<string:username>', methods=['DELETE'])
-def delete_user_by_username(username):
-    user = users.query.filter_by(username=username).first()
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-        return {'message': 'Usuario eliminado exitosamente'}, 200
-    else:
-        return {'error': 'Usuario no encontrado'}, 404
+# @user_routes.route('/users/<string:username>', methods=['DELETE'])
+# def delete_user_by_username(username):
+#     user = users.query.filter_by(username=username).first()
+#     if user:
+#         db.session.delete(user)
+#         db.session.commit()
+#         return {'message': 'Usuario eliminado exitosamente'}, 200
+#     else:
+#         return {'error': 'Usuario no encontrado'}, 404
