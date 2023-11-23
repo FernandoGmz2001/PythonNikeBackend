@@ -9,7 +9,7 @@ def get_all_products():
 
 @product_routes.route('/products', methods=['POST'])
 def create_products():
-    product_data = request.get_json()  # Obtén los datos del cuerpo de la solicitud
+    product_data = request.get_json()  
     if isinstance(product_data, list):  # Verifica si los datos son una lista
         for data in product_data:
             # Verifica si el producto ya existe en la base de datos

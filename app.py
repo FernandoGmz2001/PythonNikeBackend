@@ -14,11 +14,13 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)  # Inicializa Flask-Migrate
 
-# Importa tus modelos aquí
 from controllers.models_folder.models import products
+from controllers.models_folder.models import users
 
 with app.app_context():
     db.create_all()
 
 from routes.product_routes import product_routes
+from routes.user_routes import user_routes
 app.register_blueprint(product_routes)
+app.register_blueprint(user_routes)
