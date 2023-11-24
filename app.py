@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(app)
 
@@ -22,5 +22,7 @@ with app.app_context():
 
 from routes.product_routes import product_routes
 from routes.user_routes import user_routes
+from routes.auth_routes import auth_routes
 app.register_blueprint(product_routes)
 app.register_blueprint(user_routes)
+app.register_blueprint(auth_routes)
