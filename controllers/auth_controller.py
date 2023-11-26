@@ -13,19 +13,21 @@ def login(request):
 
     user = users.query.filter_by(email=email).first()
 
-    if user and user.password == password and user.userId == 3:
+    print(user.userId)
+    if user and user.password == password:
         # Usuario autenticado correctamente
-        # Generar el token JWT
-        token = jwt.encode({
-            'user_id': user.userId,
-            # 'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
-        }, 'arbol')
-        
-        print(token)
-        return jsonify({'token': token,'status':200}), 200
+        # Generar el token JWT solo para el usuario con ID 3
+        if user.userId == 3:
+            token = jwt.encode({
+                'user_id': user.userId,
+                'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
+            }, 'arbol')
+            print(token)
+            return jsonify({'token': token, 'status': 200, 'email': email, 'userId': user.userId}), 200
+        return jsonify({'status': 200, 'email': email}), 200
     else:
         # Credenciales inválidas
-        return jsonify({'message': 'Credenciales inválidas','status':401}), 401
+        return jsonify({'message': 'Credenciales inválidas', 'status': 401}), 401
 
 def register(request):
     user_data = request.get_json()

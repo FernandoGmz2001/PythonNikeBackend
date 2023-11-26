@@ -7,6 +7,21 @@ def get_all_products():
     productos = products.query.all()
     return {'productos': [producto.to_dict() for producto in productos]}, 200
 
+@product_routes.route('/products/<int:product_id>', methods=['GET'])
+def get_product_by_id(product_id):
+    product = products.query.get(product_id)
+    if product:
+        return {
+            'productId': product.productId,
+            'productName': product.productName,
+            'productImage': product.productImage,
+            'productPrice': product.productPrice,
+            'productDescription': product.productDescription,
+            'productGender': product.productGender
+        }, 200
+    else:
+        return {'error': 'Producto no encontrado'}, 404
+
 @product_routes.route('/products', methods=['POST'])
 def create_products():
     product_data = request.get_json()  

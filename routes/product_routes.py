@@ -4,7 +4,8 @@ from controllers.product_controller import (
     create_products,
     update_product,
     delete_product,
-    delete_product_by_name
+    delete_product_by_name,
+    get_product_by_id
 )
 
 product_routes = Blueprint("product_routes", __name__)
@@ -15,6 +16,13 @@ def products():
     products = get_all_products()
     return jsonify(products)
 
+@product_routes.route("/products/<int:product_id>", methods=["GET"])
+def product_by_id(product_id):
+    product = get_product_by_id(product_id)
+    if product:
+        return jsonify(product)
+    else:
+        return jsonify({"message": "Product not found"}), 404
 
 @product_routes.route("/products", methods=["POST"])
 def add_product():
