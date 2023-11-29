@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify
-from controllers.models_folder.models import orders
+from flask import Blueprint, jsonify,request
+from controllers.models_folder.models import orders,db
 
 order_controller = Blueprint('order_controller', __name__)
 
@@ -13,3 +13,11 @@ def get_all_orders():
 
     # Devolver las órdenes como una respuesta JSON
     return jsonify(dicOrders)
+
+@order_controller.route('/orders', methods=['POST'])
+def create_order():
+    data = request.get_json()
+    new_order = orders(**data)
+    db.session.add(new_order)
+    db.session.commit()
+    return jsonify({'message': 'Orden created successfully', 'Order': new_order.to_dict()}), 201

@@ -6,3 +6,5 @@ flask-bcrypt
 bcrypt
 flask-cors
 psycopg2
+pandas
+openpyxl

@@ -20,11 +20,11 @@ def login(request):
         if user.email == 'fer@admin.mx':
             token = jwt.encode({
                 'user_id': user.userId,
-                'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
+                # 'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
             }, 'arbol')
             print(token)
-            return jsonify({'token': token, 'status': 200, 'email': email, 'userId': user.userId}), 200
-        return jsonify({'status': 200, 'email': email}), 200
+            return jsonify({'token': token, 'status': 200, 'email': email, 'userId': user.userId, 'username': user.username}), 200
+        return jsonify({'status': 200, 'email': email, 'userId': user.userId,'username':user.username}), 200
     else:
         # Credenciales inválidas
         return jsonify({'message': 'Credenciales inválidas', 'status': 401}), 401
