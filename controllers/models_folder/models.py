@@ -31,3 +31,24 @@ class users(db.Model):
             'email': self.email,
             'password': self.password,
         }
+class orders(db.Model):
+    orderId = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer, db.ForeignKey('users.userId'), nullable=False)
+    productId = db.Column(db.Integer, db.ForeignKey('products.productId'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    total = db.Column(db.Float, nullable=False)
+
+    def __init__(self, userId, productId, quantity, total):
+        self.userId = userId
+        self.productId = productId
+        self.quantity = quantity
+        self.total = total
+
+    def to_dict(self):
+        return {
+            'orderId': self.orderId,
+            'userId': self.userId,
+            'productId': self.productId,
+            'quantity': self.quantity,
+            'total': self.total
+        }

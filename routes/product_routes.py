@@ -5,7 +5,8 @@ from controllers.product_controller import (
     update_product,
     delete_product,
     delete_product_by_name,
-    get_product_by_id
+    get_product_by_id,
+    export_products
 )
 
 product_routes = Blueprint("product_routes", __name__)
@@ -45,3 +46,8 @@ def delete_product_route(product_id):
 def delete_product_by_name_route(product_name):
     delete_product_by_name(product_name)
     return jsonify({"message": "Product deleted successfully"}), 200
+
+@product_routes.route("/products/export", methods=["GET"])
+def generate_excel():
+    export_products()
+    return jsonify({"message": "Products exported successfully"}), 200

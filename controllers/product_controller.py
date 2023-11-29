@@ -1,5 +1,9 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, send_file
+import pandas as pd
+from openpyxl import Workbook
 from controllers.models_folder.models import db, products
+from openpyxl.utils.dataframe import dataframe_to_rows
+
 product_routes = Blueprint('product_routes', __name__)
 
 @product_routes.route('/products', methods=['GET'])
@@ -92,3 +96,31 @@ def delete_product_by_name(product_name):
         return {'message': 'Producto eliminado exitosamente'}, 200
     else:
         return {'error': 'Producto no encontrado'}, 404
+
+@product_routes.route('/products/export', methods=['GET'])
+def export_products():
+    # Obtener todos los productos de la base de datos
+    all_products = products.query.all()
+
+    # Crear un DataFrame de pandas con los datos de los productos
+    data = {
+        'Product ID': [product.productId for product in all_products],
+        'Product Name': [product.productName for product in all_products],
+        'Product Image': [product.productImage for product in all_products],
+        'Product Price': [product.productPrice for product in all_products],
+        'Product Description': [product.productDescription for product in all_products],
+        'Product Gender': [product.productGender for product in all_products]
+    }
+    df = pd.DataFrame(data)
+
+    # Crear un nuevo archivo de Excel y guardar los datos del DataFrame en él
+    workbook = Workbook()
+    sheet = workbook.active
+    for row in dataframe_to_rows(df, index=False, header=True):
+        sheet.append(row)
+
+    # Guardar el archivo de Excel
+    filename = 'products.xlsx'
+    workbook.save(filename)
+
+    return send_file(filename, as_attachment=True)
