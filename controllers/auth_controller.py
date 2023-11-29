@@ -17,7 +17,7 @@ def login(request):
     if user and user.password == password:
         # Usuario autenticado correctamente
         # Generar el token JWT solo para el usuario con ID 3
-        if user.userId == 3:
+        if user.email == 'fer@admin.mx':
             token = jwt.encode({
                 'user_id': user.userId,
                 'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
