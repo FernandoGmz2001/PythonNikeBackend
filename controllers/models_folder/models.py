@@ -23,6 +23,7 @@ class users(db.Model):
     username = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(300), unique=False)
+    avatarImage = db.Column(db.String(500), unique=False)  # new field
 
     def to_dict(self):
         return {
@@ -30,6 +31,7 @@ class users(db.Model):
             'username': self.username,
             'email': self.email,
             'password': self.password,
+            'avatarImage': self.avatarImage,  # include new field in dict
         }
 class orders(db.Model):
     orderId = db.Column(db.Integer, primary_key=True)

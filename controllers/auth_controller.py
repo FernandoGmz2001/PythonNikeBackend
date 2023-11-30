@@ -23,8 +23,8 @@ def login(request):
                 # 'exp': datetime.utcnow() + timedelta(hours=1)  # Expira en 1 hora
             }, 'arbol')
             print(token)
-            return jsonify({'token': token, 'status': 200, 'email': email, 'userId': user.userId, 'username': user.username}), 200
-        return jsonify({'status': 200, 'email': email, 'userId': user.userId,'username':user.username}), 200
+            return jsonify({'token': token, 'status': 200, 'email': email, 'userId': user.userId, 'username': user.username,'avatarImage': user.avatarImage}), 200
+        return jsonify({'status': 200, 'email': email, 'userId': user.userId,'username':user.username, 'avatarImage':user.avatarImage}), 200
     else:
         # Credenciales inválidas
         return jsonify({'message': 'Credenciales inválidas', 'status': 401}), 401

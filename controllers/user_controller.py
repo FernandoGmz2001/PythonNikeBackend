@@ -52,9 +52,14 @@ def update_user(user_id):
     user = users.query.get(user_id)
     if user:
         user_data = request.get_json()
-        user.username = user_data['username']
-        user.email = user_data['email']
-        user.password = user_data['password']
+        if 'username' in user_data:
+            user.username = user_data['username']
+        if 'email' in user_data:
+            user.email = user_data['email']
+        if 'password' in user_data:
+            user.password = user_data['password']
+        if 'avatarImage' in user_data:
+            user.avatarImage = user_data['avatarImage']
         db.session.commit()
         return {'message': 'Usuario actualizado exitosamente'}, 200
     else:
@@ -72,6 +77,14 @@ def delete_user_by_id(user_id):
             return {'error': 'Usuario no encontrado'}, 404
     else:
         return {'error': 'Método no permitido'}, 4055
+
+@user_routes.route('/users/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    user = users.query.get(user_id)
+    if user:
+        return user.to_dict(), 200
+    else:
+        return {'error': 'Usuario no encontrado'}, 404
 
 # @user_routes.route('/users/<string:username>', methods=['DELETE'])
 # def delete_user_by_username(username):
