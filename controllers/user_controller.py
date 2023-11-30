@@ -8,6 +8,14 @@ def get_all_users():
     Users = users.query.all()
     return {'users': [user.to_dict() for user in Users]}, 200
 
+@user_routes.route('/users/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    user = users.query.get(user_id)
+    if user:
+        return {'user': user.to_dict()}, 200
+    else:
+        return {'message': 'Usuario no encontrado'}, 404
+
 @user_routes.route('/users', methods=['POST'])
 def create_user():
     user_data = request.get_json()
