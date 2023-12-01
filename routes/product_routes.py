@@ -6,7 +6,8 @@ from controllers.product_controller import (
     delete_product,
     delete_product_by_name,
     get_product_by_id,
-    export_products
+    export_products,
+    import_excel
 )
 
 product_routes = Blueprint("product_routes", __name__)
@@ -38,10 +39,14 @@ def update_product_route(product_id):
     return jsonify({"message": "Product updated successfully"}), 200
 
 
-@product_routes.route("/products/<product_id>", methods=["DELETE"])
+@product_routes.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_product_route(product_id):
-    delete_product(product_id)
-    return jsonify({"message": "Product deleted successfully"}), 200
+    product = get_product_by_id(product_id)
+    if product:
+        delete_product(product_id)
+        return jsonify({"message": "Product deleted successfully"}), 200
+    else:
+        return jsonify({"error": "The product was binded to an order"}), 404
 
 def delete_product_by_name_route(product_name):
     delete_product_by_name(product_name)
@@ -51,3 +56,14 @@ def delete_product_by_name_route(product_name):
 def generate_excel():
     export_products()
     return jsonify({"message": "Products exported successfully"}), 200
+
+
+@product_routes.route("/products/import", methods=["POST"])
+def import_excel_route():
+    file = request.files["file"]
+    if file and file.filename.endswith(".xlsx"):
+        file.save("temp.xlsx")  # Guardar el archivo temporalmente
+        import_excel("temp.xlsx")  # Importar el archivo Excel
+        return jsonify({"message": "File imported successfully"}), 200
+    else:
+        return jsonify({"error": "Invalid file format"}), 400
